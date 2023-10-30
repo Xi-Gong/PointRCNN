@@ -184,7 +184,9 @@ def cfg_from_file(filename):
     """Load a config file and merge it into the default options."""
     import yaml
     with open(filename, 'r') as f:
-        yaml_cfg = edict(yaml.load(f))
+        # 在Python 3.8中为了解决 yaml.load(f) 方法可能会产生的安全隐患，开发者被推荐使用一个显示的加载器。
+        # PyYAML库中的 yaml.load(f, Loader=yaml.FullLoader) 方法是一个更安全的替代方案，它能够防止潜在的任意代码执行攻击。
+        yaml_cfg = edict(yaml.load(f, Loader=yaml.FullLoader))
 
     _merge_a_into_b(yaml_cfg, __C)
 
